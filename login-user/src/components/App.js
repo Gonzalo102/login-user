@@ -1,32 +1,38 @@
-import { Container} from 'react-bootstrap'
-import { AuthProvider } from '../context/AuthContext'
+import { Container } from 'react-bootstrap'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
+import { useAuth } from '../context/AuthContext'
 import Dashboard from "./Dashboard"
 import Signup from "./Signup"
 import Login from "./Login"
 
 function App() {
+    const auth = useAuth()
     return (
         <Container className="d-flex align-items-center 
         justify-content-center"
-            style={{minHeight: "100vh"}}
+            style={{ minHeight: "100vh" }}
         >
-            <div className="w-100" style={{maxWidth: '400px'}}>
+            <div className="w-100" style={{ maxWidth: '400px' }}>
                 <Router>
-                    <AuthProvider>
+                    {console.log('asd', auth)}
+                    {auth && auth.currentUser && (
                         <Switch>
-                            <Route exact path="/" component={Dashboard}/>
-                            <Route path="/signup" component={Signup}/>
-                            <Route path="/login" component={Login}/>
+                            <Route exact path="/" component={Dashboard} />
                         </Switch>
-                    </AuthProvider>
+                    )}
+
+                    {auth && !auth.currentUser && (
+                         <Switch>
+                            <Route path="/login" component={Login} />
+                            <Route path="/signup" component={Signup} />
+                        </Switch>
+                    )}
                 </Router>
-            <Signup/>
+
             </div>
         </Container>
-        
+
     );
-  }
-  
-  export default App;
-  
+}
+
+export default App;
